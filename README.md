@@ -29,7 +29,6 @@ Gemini-Support-Bot-Django/
 ├── Chatbot/urls.py
 ├── manage.py
 ├── static/                   # Static files for frontend
-├── staticfiles/              # Generated static files (ignored in Git)
 ├── templates/                # Common templates
 ├── .env                      # Environment variables (Gemini API Key)
 └── requirements.txt
@@ -43,3 +42,38 @@ Gemini-Support-Bot-Django/
 ```bash
 git clone https://github.com/your-username/Gemini-Support-Bot-Django.git
 cd Gemini-Support-Bot-Django
+```
+### 2. Create and activate a virtual environment
+
+```bash
+python -m venv venv
+# On macOS/Linux
+source venv/bin/activate
+# On Windows
+venv\Scripts\activate
+```
+### 3. Configure environment variables
+
+```bash
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+### 4. Apply database migrations
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+### 5. Create a superuser (for admin access)
+
+```bash
+python manage.py createsuperuser
+```
+### 6. Run the development server
+
+```bash
+python manage.py runserver
+```
+Open the application in your browser:
+```bash
+http://127.0.0.1:8000
+```
