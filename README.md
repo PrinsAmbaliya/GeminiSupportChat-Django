@@ -77,3 +77,28 @@ Open the application in your browser:
 ```bash
 http://127.0.0.1:8000
 ```
+
+---
+
+## Usage
+
+-Sign Up / Sign In: Users can create an account and log in.
+
+-Chat Interface: Users can create new chat sessions and send messages.
+
+-AI Responses: Chatbot responds using Google Gemini AI.
+
+-Session Management: Users can view previous chat sessions and messages.
+
+---
+
+## API Endpoints
+
+| Endpoint                      | Method | Description                |
+| ----------------------------- | ------ | -------------------------- |
+| `/api/register`               | POST   | Register a new user        |
+| `/api/login`                  | POST   | Login user                 |
+| `/api/session/create`         | POST   | Create a new chat session  |
+| `/api/chat/<session_id>/chat` | POST   | Send message to chatbot    |
+| `/api/session/user/<user_id>` | GET    | Get all sessions of a user |
+
