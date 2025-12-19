@@ -176,12 +176,19 @@ body.light .msg-wrapper.user .message {
   color: #ffffff !important;
 }
 
+.outer-container-chatform{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .chat-form {
   position: fixed;
   bottom: 0;
-  left: 326px;
   width: 60%;
   display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0.6rem 1rem;
   gap: 0.6rem;
   /* background: rgb(34, 193, 195); */

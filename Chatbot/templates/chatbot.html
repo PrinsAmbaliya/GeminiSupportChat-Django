@@ -1,66 +1,84 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Support Chatbot</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <script src="{% static 'js/script.js' %}" defer></script>
-</head>
-<body>
-  <header class="header">
-    <div class="logo" style="display:flex; align-items:center; gap:0.6rem;">
-        <img src="{% static 'images/logo.png' %}" alt="Logo" width="80" height="60">
-        <span style="font-weight:600; font-size:1.2rem;">Customer Support Chatbot</span>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Support Chatbot</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script src="{% static 'js/script.js' %}" defer></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo" style="display: flex; align-items: center; gap: 0.6rem">
+        <img
+          src="{% static 'images/logo.png' %}"
+          alt="Logo"
+          width="80"
+          height="60"
+        />
+        <span style="font-weight: 600; font-size: 1.2rem"
+          >Customer Support Chatbot</span
+        >
+      </div>
 
-    <div style="display:flex; align-items:center; gap:1rem;">
-      <a href="/chat/" class="new-chat-btn" id="new_chat">
-        + New Chat
-      </a>
-      {% comment %} <a href="/signinPage/" class="new-chat-btn" id="new_chat">
-        signinPage
-      </a> {% endcomment %}
-      
-      <button id="ttsToggle" class="voice-button" title="Toggle bot voice">
-        <img src="{% static 'images/speaker.png' %}" class="speaker-icon">
-      </button>
+      <div style="display: flex; align-items: center; gap: 1rem">
+        <a href="/chat/" class="new-chat-btn" id="new_chat"> + New Chat </a>
+        {% comment %}
+        <a href="/signinPage/" class="new-chat-btn" id="new_chat">
+          signinPage
+        </a>
+        {% endcomment %}
 
-      <div class="tdnn"><div class="moon"></div></div>
-    </div>
-  </header>
+        <button id="ttsToggle" class="voice-button" title="Toggle bot voice">
+          <img src="{% static 'images/speaker.png' %}" class="speaker-icon" />
+        </button>
 
-  <div class="chat-box" id="chatBox">
-    {% for chat in chats %}
+        <div class="tdnn"><div class="moon"></div></div>
+      </div>
+    </header>
+
+    <div class="chat-box" id="chatBox">
+      {% for chat in chats %}
       <div class="msg-wrapper user">
         <div class="timestamp">{{ chat.timestamp|date:"H:i" }}</div>
         <div class="message">{{ chat.message }}</div>
-        <img src="{% static 'images/user-logo.png' %}" alt="user">
+        <img src="{% static 'images/user-logo.png' %}" alt="user" />
       </div>
       <div class="msg-wrapper bot">
-        <img src="{% static 'images/bot-logo.png' %}" alt="bot">
+        <img src="{% static 'images/bot-logo.png' %}" alt="bot" />
         <div class="message">{{ chat.response }}</div>
         <div class="timestamp">{{ chat.timestamp|date:"H:i" }}</div>
       </div>
-    {% endfor %}
-  </div>
-
-  <form id="chatForm" class="chat-form">
-    <div class="input-wrapper">
-      <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off" required>
-      <button id="voiceBtn" class="chat-mic-btn" type="button"></button>
+      {% endfor %}
     </div>
-    <button type="submit" class="send-btn">Send</button>
-  </form>
 
-  <input type="hidden" id="currentSessionId" value="{{ session_id|default:'None' }}">
+    <div class="outer-container-chatform">
+      <form id="chatForm" class="chat-form">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="userInput"
+            placeholder="Type your message..."
+            autocomplete="off"
+            required
+          />
+          <button id="voiceBtn" class="chat-mic-btn" type="button"></button>
+        </div>
+        <button type="submit" class="send-btn">Send</button>
+      </form>
+    </div>
 
+    <input
+      type="hidden"
+      id="currentSessionId"
+      value="{{ session_id|default:'None' }}"
+    />
 
-  <script>
-    const USER_LOGO = "{% static 'images/user-logo.png' %}";
-    const BOT_LOGO = "{% static 'images/bot-logo.png' %}";
-    let currentSessionId = document.getElementById("currentSessionId").value;
-  </script>
-</body>
+    <script>
+      const USER_LOGO = "{% static 'images/user-logo.png' %}";
+      const BOT_LOGO = "{% static 'images/bot-logo.png' %}";
+      let currentSessionId = document.getElementById("currentSessionId").value;
+    </script>
+  </body>
 </html>
