@@ -18,20 +18,19 @@ A **Django-based Customer Support Chatbot** powered by Google Gemini AI API. Use
 ## Project Structure
 
 Gemini-Support-Bot-Django/
-│
-├── Chatbot/ # Django app
-│ ├── models.py
-│ ├── serializers.py
-│ ├── views.py
-│ ├── urls.py
-│ └── templates/ # HTML templates
+├── Chatbot/                  # Django app
+│   ├── models.py
+│   ├── serializers.py
+│   ├── views.py
+│   └── urls.py
+│   └── templates/            # HTML templates
 ├── Chatbot/settings.py
 ├── Chatbot/urls.py
 ├── manage.py
-├── static/ # Static files for frontend
-├── staticfiles/ # Generated static files (ignored in Git)
-├── templates/ # Common templates
-├── .env # Environment variables (Gemini API Key)
+├── static/                   # Static files for frontend
+├── staticfiles/              # Generated static files (ignored in Git)
+├── templates/                # Common templates
+├── .env                      # Environment variables (Gemini API Key)
 └── requirements.txt
 
 ---
