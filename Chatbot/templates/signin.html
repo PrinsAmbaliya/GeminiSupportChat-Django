@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        background: rgb(34, 193, 195);
+        background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, #313338);
+        background-attachment: fixed;
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+      }
+
+      #form {
+        width: 400px;
+        margin: 20vh auto 0 auto;
+        background-color: whitesmoke;
+        border-radius: 5px;
+        padding: 30px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #313338;
+      }
+
+      #form button {
+        background-color: #313338;
+        color: #e2e3e5;
+        border: 1px solid #313338;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 20px 0px;
+        cursor: pointer;
+        font-size: 20px;
+        width: 100%;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+
+      .input-group input {
+        border-radius: 5px;
+        font-size: 20px;
+        margin-top: 5px;
+        padding: 10px;
+        border: 1px solid rgb(34, 193, 195);
+      }
+
+      .input-group input:focus {
+        outline: 0;
+      }
+
+      .input-group .error {
+        color: rgb(242, 18, 18);
+        font-size: 16px;
+        margin-top: 5px;
+      }
+
+      .input-group.success input {
+        border-color: #0cc477;
+      }
+
+      .input-group.error input {
+        border-color: rgb(206, 67, 67);
+      }
+
+      #signup {
+        background-color: #f5f5f5;
+        color: #313338;
+        width: 100%;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+    <title>Sign In</title>
+  </head>
+  <body>
+    <form id="form" method="POST">
+      {% csrf_token %}
+      <h1>Sign In</h1>
+
+      {% if signup_success %}
+      <div class="success-message">
+        Signup successfully completed! Please sign in.
+      </div>
+      {% endif %}
+
+      {% if non_field_errors %}
+      <div style="color: red; margin-bottom: 15px;">
+        {% for error in non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if messages %}
+      {% for message in messages %}
+      <p style="color: red; margin-bottom: 15px;">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+
+      <div class="input-group {% if errors.username_or_email %}error{% endif %}">
+        <label for="id_username_or_email">Username or Email</label>
+        <input
+          id="id_username_or_email"
+          type="text"
+          name="username_or_email"
+          value="{{ old_data.username_or_email|default:'' }}"
+        />
+        {% if errors.username_or_email %}
+        <div class="error">
+          {% for error in errors.username_or_email %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="input-group {% if errors.password %}error{% endif %}">
+        <label for="id_password">Password</label>
+        <input id="id_password" type="password" name="password" />
+        {% if errors.password %}
+        <div class="error">
+          {% for error in errors.password %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <button type="submit">Sign In</button>
+      <a href="/signupPage/" id="signup">Sign Up</a>
+    </form>
+  </body>
+</html>

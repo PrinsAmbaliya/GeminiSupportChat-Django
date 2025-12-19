@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        background: rgb(34, 193, 195);
+        background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, #313338);
+        background-attachment: fixed;
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+      }
+
+      #form {
+        width: 400px;
+        margin: 20vh auto 0 auto;
+        background-color: whitesmoke;
+        border-radius: 5px;
+        padding: 30px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #313338;
+      }
+
+      #form button {
+        background-color: #313338;
+        color: #e2e3e5;
+        border: 1px solid #313338;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 20px 0px;
+        cursor: pointer;
+        font-size: 20px;
+        width: 100%;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+
+      .input-group input {
+        border-radius: 5px;
+        font-size: 20px;
+        margin-top: 5px;
+        padding: 10px;
+        border: 1px solid rgb(34, 193, 195);
+      }
+
+      .input-group input:focus {
+        outline: 0;
+      }
+
+      .input-group .error {
+        color: rgb(242, 18, 18);
+        font-size: 16px;
+        margin-top: 5px;
+      }
+
+      .input-group.success input {
+        border-color: #0cc477;
+      }
+
+      .input-group.error input {
+        border-color: rgb(206, 67, 67);
+      }
+
+      #signin {
+        background-color: #f5f5f5;
+        color: #313338;
+        width: 100%;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <form id="form" method="POST">
+      {% csrf_token %}
+      <h1>Sign Up</h1>
+
+      {% if signup_success %}
+      <div class="success-message">Signup successfully completed!</div>
+      {% endif %} {% if form.non_field_errors %}
+      <div style="color: red; margin-bottom: 15px">
+        {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %} {% if messages %} {% for message in messages %}
+      <p style="color: red; margin-bottom: 15px">{{ message }}</p>
+      {% endfor %} {% endif %}
+
+      <div class="input-group {% if errors.first_name %}error{% endif %}">
+        <label for="id_first_name">First Name</label>
+        <input
+          id="id_first_name"
+          type="text"
+          name="first_name"
+          value="{{ old_data.first_name|default:'' }}"
+        />
+        {% if errors.first_name %}
+        <div class="error">{{ errors.first_name.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="input-group {% if errors.last_name %}error{% endif %}">
+        <label for="id_last_name">Last Name</label>
+        <input
+          id="id_last_name"
+          type="text"
+          name="last_name"
+          value="{{ old_data.last_name|default:'' }}"
+        />
+        {% if errors.last_name %}
+        <div class="error">{{ errors.last_name.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="input-group {% if errors.username %}error{% endif %}">
+        <label for="id_username">Username</label>
+        <input
+          id="id_username"
+          type="text"
+          name="username"
+          value="{{ old_data.username|default:'' }}"
+        />
+        {% if errors.username %}
+        <div class="error">{{ errors.username.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="input-group {% if errors.email %}error{% endif %}">
+        <label for="id_email">Email</label>
+        <input
+          id="id_email"
+          type="text"
+          name="email"
+          value="{{ old_data.email|default:'' }}"
+        />
+        {% if errors.email %}
+        <div class="error">{{ errors.email.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="input-group {% if errors.password %}error{% endif %}">
+        <label for="id_password">Password</label>
+        <input id="id_password" type="password" name="password" />
+        {% if errors.password %}
+        <div class="error">{{ errors.password.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="input-group {% if errors.confirm_password %}error{% endif %}">
+        <label for="id_confirm_password">Confirm Password</label>
+        <input
+          id="id_confirm_password"
+          type="password"
+          name="confirm_password"
+        />
+        {% if errors.confirm_password %}
+        <div class="error">{{ errors.confirm_password.0 }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit">Sign Up</button>
+      <a href="/signinPage/" id="signin">Sign In</a>
+    </form>
+  </body>
+</html>
