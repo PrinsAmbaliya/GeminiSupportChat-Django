@@ -235,7 +235,7 @@ class ChatSerializer(serializers.ModelSerializer):
 
         except Exception as e:
             error_msg = str(e).lower()
-            print("GEMINI API ERROR:", repr(e))  # Full error in console
+            print("GEMINI API ERROR:", repr(e))
 
             if (
                 "quota" in error_msg
@@ -263,37 +263,76 @@ class ChatSerializer(serializers.ModelSerializer):
 
         return chat
 
-    def generate_title(self, first_message):
-        prompt = f"""
-    Generate a concise 3–7 word title for a customer support chat.
-    User message: "{first_message}"
-    Return only the title.
-    """
+    def generate_title(self, first_message: str) -> str:
+        """
+        Generates a concise title (3-7 words) for a customer support chat based on the user's first message.
+        Falls back gracefully if the AI model fails.
+        """
+        if not first_message or not first_message.strip():
+            return "Support Chat"
+
+        prompt = f"""You are a concise title generator for customer support chats.
+    Your task is to create a short title of 3-7 words that best summarizes the main issue or topic in the user's first message.
+    Focus only on the core problem or request.
+    Do not use quotes, explanations, or any additional text.
+    Output ONLY the title.
+
+    User's first message: "{first_message.strip()}"
+
+    Title:"""
 
         try:
             response = title_model.generate_content(
                 prompt,
                 generation_config=genai.GenerationConfig(
-                    temperature=0.2,
-                    max_output_tokens=30,
+                    temperature=0.3,       
+                    max_output_tokens=20,  
+                    top_p=0.8,
                 ),
             )
 
-            if response.candidates and len(response.candidates) > 0:
-                title = (
-                    "".join(
-                        part.text
-                        for part in response.candidates[0].content.parts
-                        if hasattr(part, "text")
-                    )
-                    .strip()
-                )
+            if response.candidates:
+                candidate = response.candidates[0]
+                if getattr(candidate, 'finish_reason', None) == candidate.FinishReason.SAFETY:
+                    return "Support Chat"
 
-                if 2 <= len(title.split()) <= 10:
+                title = "".join(
+                    part.text for part in candidate.content.parts
+                    if hasattr(part, "text")
+                ).strip()
+
+                if title:
+                    title = title.strip(' "\'')
+                    words = title.split()
+
+                    if 3 <= len(words) <= 10:
+                        return title
+
+                    if len(words) > 10:
+                        return " ".join(words[:7]) + "..."  
+
+            keywords = [
+                "withdraw", "withdrawal", "deposit", "transfer", "money", "balance",
+                "login", "password", "error", "503", "app", "crash", "not working",
+                "sbi", "bank", "account", "transaction", "payment", "card", "upi"
+            ]
+            found = [word for word in keywords if word in first_message.lower()]
+            if found:
+                title = " ".join(found[:5]).title()
+                if 3 <= len(title.split()) <= 10:
                     return title
 
-            return "New Chat"
+            words = [w for w in first_message.split()[:15] if len(w) > 2 and w.isalnum()]
+            if len(words) >= 3:
+                return " ".join(words[:7]).strip('.,!?') + ("..." if len(words) > 7 else "")
+
+            return "Support Chat"
 
         except Exception as e:
-            print("Title generation failed:", repr(e))
-            return "New Chat"
+            try:
+                words = [w for w in first_message.split()[:15] if len(w) > 2 and w.isalnum()]
+                if len(words) >= 3:
+                    return " ".join(words[:7]).strip('.,!?') + ("..." if len(words) > 7 else "")
+            except:
+                pass
+            return "Support Chat"

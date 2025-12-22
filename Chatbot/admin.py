@@ -34,7 +34,7 @@ class SessionAdmin(admin.ModelAdmin):
         'username',
         'session_id',
         'title',
-        'description',
+        # 'description',
         'created_at',
   
     )
