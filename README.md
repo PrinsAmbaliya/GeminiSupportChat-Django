@@ -136,6 +136,18 @@ http://127.0.0.1:8000
 ### 7. Save User Chats
 <img width="1915" height="1021" alt="Screenshot 2025-12-22 095502" src="https://github.com/user-attachments/assets/2e8fdcc0-432f-4942-a0b9-89ba8eedd1e1" />
 
+### 8. API Testing Of SignUp In Postman
+<img width="1919" height="1017" alt="Screenshot 2025-12-22 103204" src="https://github.com/user-attachments/assets/25f59950-1d6a-4e7d-997d-f249eca2b3b9" />
+
+### 9. API Testing Of SignIn In Postman
+<img width="1918" height="1019" alt="image" src="https://github.com/user-attachments/assets/d83cbc85-5b69-46cb-b385-1d35c3bf877c" />
+
+### 10. API Testing Of Create Session Id In Postman
+<img width="1919" height="1016" alt="image" src="https://github.com/user-attachments/assets/dc90ff57-84a8-4861-9bfa-88bbe31e5de6" />
+
+### 11. API Testing Of Save Chats Of Session Id In Postman
+<img width="1919" height="1014" alt="image" src="https://github.com/user-attachments/assets/5430da8b-851f-4555-9f29-5ea4f6639e20" />
+
 ---
 
 ## Author
