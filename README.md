@@ -1,21 +1,34 @@
 # GeminiSupportBot-Django
 
-A **Django-based Customer Support Chatbot** powered by Google Gemini AI API. Users can sign up, sign in, create chat sessions, and interact with a chatbot for assistance. This project demonstrates a full-stack Django application integrated with an AI-powered chatbot for customer support.
+A **Django-based Customer Support Chatbot** powered by **Google Gemini (gemini-3-flash-preview)**.  
+Users can sign up, sign in, create chat sessions, and interact with an AI chatbot.  
+The project uses **PostgreSQL** for persistent data storage and supports automatic chat title generation.
 
 ---
 
 ## Features
 
-- User authentication (Sign Up / Sign In)
-- Create and manage chat sessions
-- Real-time AI chatbot responses using Google Gemini
-- Session-based chat history
-- Session-based chat title
-- Web interface for chatting with the bot
-- REST API endpoints for programmatic access
+- User Authentication (Sign Up / Sign In)
+- Session-based chat system
+- Automatic chat title generation from user query
+- Context-aware AI responses using Google Gemini
+- Persistent chat history using PostgreSQL
+- Light & Dark mode UI
+- Django Admin panel support
+- REST API endpoints
+- Postman API testing support
 
 ---
 
+## Tech Stack
+
+- Backend: Django, Django REST Framework
+- AI Model: Google Gemini (gemini-3-flash-preview)
+- Database: PostgreSQL
+- Frontend: HTML, CSS, JavaScript
+- API Testing: Postman
+  
+---
 ## Project Structure
 
 ```bash
