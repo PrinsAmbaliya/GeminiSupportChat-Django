@@ -1,4 +1,4 @@
-# Gemini-Support-Bot-Django
+# GeminiSupportBot-Django
 
 A **Django-based Customer Support Chatbot** powered by Google Gemini AI API. Users can sign up, sign in, create chat sessions, and interact with a chatbot for assistance. This project demonstrates a full-stack Django application integrated with an AI-powered chatbot for customer support.
 
