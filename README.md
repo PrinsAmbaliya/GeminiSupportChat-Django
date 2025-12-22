@@ -10,6 +10,7 @@ A **Django-based Customer Support Chatbot** powered by Google Gemini AI API. Use
 - Create and manage chat sessions
 - Real-time AI chatbot responses using Google Gemini
 - Session-based chat history
+- Session-based chat title
 - Web interface for chatting with the bot
 - REST API endpoints for programmatic access
 
