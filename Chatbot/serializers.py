@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Session,Chat
+from .models import Session, Chat
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 import re
@@ -9,9 +9,10 @@ import os
 
 load_dotenv()
 
+
 class SignUpSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(
-        write_only=True,required=False, style={"input_type": "password"}
+        write_only=True, required=False, style={"input_type": "password"}
     )
 
     class Meta:
@@ -56,12 +57,12 @@ class SignUpSerializer(serializers.ModelSerializer):
         password = data.get("password")
         confirm_password = data.get("confirm_password")
         if password and not confirm_password:
-            raise serializers.ValidationError({
-                "confirm_password": "Confirm password is required."
-            })
+            raise serializers.ValidationError(
+                {"confirm_password": "Confirm password is required."}
+            )
         if password != confirm_password:
             raise serializers.ValidationError(
-                {"confirm_password":"Confirm_Passwords do not match with Password!"}
+                {"confirm_password": "Confirm_Passwords do not match with Password!"}
             )
         return data
 
@@ -78,17 +79,22 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 
 class SignInSerializer(serializers.Serializer):
-    username_or_email = serializers.CharField(required=True,allow_blank=False)
-    password = serializers.CharField(required=True, style={"input_type": "password"},)
+    username_or_email = serializers.CharField(required=True, allow_blank=False)
+    password = serializers.CharField(
+        required=True,
+        style={"input_type": "password"},
+    )
     user = None
 
     def validate(self, data):
         request = self.context.get("request")
         username = data.get("username_or_email")
         password = data.get("password")
-        
-        if not username :
-            raise serializers.ValidationError({"Username or Email": "Username or Email is required."})
+
+        if not username:
+            raise serializers.ValidationError(
+                {"Username or Email": "Username or Email is required."}
+            )
         if not password:
             raise serializers.ValidationError({"Password": "Password is required."})
         user = None
@@ -97,30 +103,35 @@ class SignInSerializer(serializers.Serializer):
                 username = User.objects.get(email=username)
                 user = authenticate(request, username=username, password=password)
             except User.DoesNotExist:
-                raise serializers.ValidationError({"Email":"Invalid Email!"})
+                raise serializers.ValidationError({"Email": "Invalid Email!"})
         if username:
             try:
                 username = User.objects.get(username=username)
                 user = authenticate(request, username=username, password=password)
             except User.DoesNotExist:
-                raise serializers.ValidationError({"Username":"Invalid Username!"})
+                raise serializers.ValidationError({"Username": "Invalid Username!"})
         if user is None:
-            raise serializers.ValidationError({"Password":"Invalid Password!"})
+            raise serializers.ValidationError({"Password": "Invalid Password!"})
         data["user"] = user
         return data
 
+
 class SessionSerializer(serializers.ModelSerializer):
-    username = serializers.SlugRelatedField(slug_field='username',queryset = User.objects.all())
+    username = serializers.SlugRelatedField(
+        slug_field="username", queryset=User.objects.all()
+    )
+
     class Meta:
         model = Session
-        fields = ['id','session_id','title','description','created_at','username']
+        fields = ["id", "session_id", "title", "description", "created_at", "username"]
+
 
 class UserSessionsSerializer(serializers.ModelSerializer):
-    username = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    username = serializers.SlugRelatedField(slug_field="username", read_only=True)
 
     class Meta:
         model = Session
-        fields = ['id','session_id', 'title', 'description', 'created_at', 'username']
+        fields = ["id", "session_id", "title", "description", "created_at", "username"]
 
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -158,24 +169,21 @@ Goal:
 
 
 model = genai.GenerativeModel(
-    model_name="gemini-3-flash-preview",
-    system_instruction=SYSTEM_PROMPT
+    model_name="gemini-3-flash-preview", system_instruction=SYSTEM_PROMPT
 )
 
-title_model = genai.GenerativeModel(
-    model_name = "gemini-3-flash-preview"
-)
-    
+title_model = genai.GenerativeModel(model_name="gemini-3-flash-preview")
+
+
 class ChatSerializer(serializers.ModelSerializer):
     response = serializers.CharField(required=False)
     session = serializers.PrimaryKeyRelatedField(
-        queryset=Session.objects.all(),
-        required=True
+        queryset=Session.objects.all(), required=True
     )
 
     class Meta:
         model = Chat
-        fields = ['id', 'session', 'message', 'response', 'timestamp']
+        fields = ["id", "session", "message", "response", "timestamp"]
 
     def validate(self, data):
         message = data.get("message", "").strip()
@@ -205,19 +213,22 @@ class ChatSerializer(serializers.ModelSerializer):
                 generation_config=genai.GenerationConfig(
                     temperature=0.6,
                     max_output_tokens=1024,
-                )
+                ),
             )
 
             if response.candidates and len(response.candidates) > 0:
                 reply = "".join(
-                    part.text for part in response.candidates[0].content.parts
+                    part.text
+                    for part in response.candidates[0].content.parts
                     if hasattr(part, "text")
                 ).strip()
                 if not reply:
                     reply = "I received your message, but couldn't generate a proper response."
             else:
-                if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
-                    block_reason = getattr(response.prompt_feedback, 'block_reason', 'UNKNOWN')
+                if hasattr(response, "prompt_feedback") and response.prompt_feedback:
+                    block_reason = getattr(
+                        response.prompt_feedback, "block_reason", "UNKNOWN"
+                    )
                     reply = f"Sorry, I can't assist with this due to content guidelines (Blocked: {block_reason})."
                 else:
                     reply = "No response generated. Please try rephrasing."
@@ -226,7 +237,11 @@ class ChatSerializer(serializers.ModelSerializer):
             error_msg = str(e).lower()
             print("GEMINI API ERROR:", repr(e))  # Full error in console
 
-            if "quota" in error_msg or "resource_exhausted" in error_msg or "429" in error_msg:
+            if (
+                "quota" in error_msg
+                or "resource_exhausted" in error_msg
+                or "429" in error_msg
+            ):
                 reply = "The AI service is temporarily busy due to high demand. Please try again in a few minutes."
             elif "billing" in error_msg:
                 reply = "AI service requires billing to be enabled. Please contact the administrator."
@@ -250,16 +265,10 @@ class ChatSerializer(serializers.ModelSerializer):
 
     def generate_title(self, first_message):
         prompt = f"""
-        Generate a very short and concise title (3-7 words) for a customer support conversation.
-        Based only on this user's first message: "{first_message}"
-
-        Examples:
-        "How to reset password" → "Password Reset Help"
-        "My order hasn't arrived" → "Order Delivery Issue"
-        "Billing problem" → "Billing Inquiry"
-
-        Return only the title. No quotes. No extra text.
-        """
+    Generate a concise 3–7 word title for a customer support chat.
+    User message: "{first_message}"
+    Return only the title.
+    """
 
         try:
             response = title_model.generate_content(
@@ -267,19 +276,24 @@ class ChatSerializer(serializers.ModelSerializer):
                 generation_config=genai.GenerationConfig(
                     temperature=0.2,
                     max_output_tokens=30,
-                )
+                ),
             )
 
             if response.candidates and len(response.candidates) > 0:
-                title = "".join(
-                    part.text for part in response.candidates[0].content.parts
-                    if hasattr(part, "text")
-                ).strip().strip('"\'')
-                
-                if title and 2 <= len(title.split()) <= 10:
+                title = (
+                    "".join(
+                        part.text
+                        for part in response.candidates[0].content.parts
+                        if hasattr(part, "text")
+                    )
+                    .strip()
+                )
+
+                if 2 <= len(title.split()) <= 10:
                     return title
+
             return "New Chat"
 
         except Exception as e:
-            print("Title generation failed:", str(e))
+            print("Title generation failed:", repr(e))
             return "New Chat"
