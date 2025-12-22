@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'Chatbot.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Customer_ChatBot',
+        'USER': 'Customer_ChatBot',
+        'PASSWORD': 'prins!@#123',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
