@@ -97,11 +97,8 @@ http://127.0.0.1:8000
 ## Usage
 
 - Sign Up / Sign In: Users can create an account and log in.
-
 - Chat Interface: Users can create new chat sessions and send messages.
-
 - AI Responses: Chatbot responds using Google Gemini AI.
-
 - Session Management: Users can view previous chat sessions and messages.
 
 ---
