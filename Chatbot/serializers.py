@@ -3,7 +3,8 @@ from .models import Session, Chat
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 import re
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 import os
 
@@ -134,7 +135,7 @@ class UserSessionsSerializer(serializers.ModelSerializer):
         fields = ["id", "session_id", "title", "description", "created_at", "username"]
 
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 SYSTEM_PROMPT = """
 You are a professional and empathetic customer support assistant.
@@ -166,13 +167,6 @@ Conversation Awareness:
 Goal:
 - Resolve the user’s issue efficiently while keeping the reply direct, helpful, and friendly.
 """
-
-
-model = genai.GenerativeModel(
-    model_name="gemini-3-flash-preview", system_instruction=SYSTEM_PROMPT
-)
-
-title_model = genai.GenerativeModel(model_name="gemini-3-flash-preview")
 
 
 class ChatSerializer(serializers.ModelSerializer):
@@ -208,12 +202,14 @@ class ChatSerializer(serializers.ModelSerializer):
         reply = "Sorry, I could not respond right now. Please try again later."
 
         try:
-            response = model.generate_content(
-                conversation,
-                generation_config=genai.GenerationConfig(
+            response = client.models.generate_content(
+                model="gemini-3-flash-preview",
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT,
                     temperature=0.6,
                     max_output_tokens=1024,
                 ),
+                contents=conversation,
             )
 
             if response.candidates and len(response.candidates) > 0:
@@ -282,39 +278,61 @@ class ChatSerializer(serializers.ModelSerializer):
     Title:"""
 
         try:
-            response = title_model.generate_content(
-                prompt,
-                generation_config=genai.GenerationConfig(
-                    temperature=0.3,       
-                    max_output_tokens=20,  
+            response = client.models.generate_content(
+                model="gemini-3-flash-preview",
+                config=types.GenerateContentConfig(
+                    temperature=0.3,
+                    max_output_tokens=20,
                     top_p=0.8,
                 ),
+                contents=prompt,
             )
 
             if response.candidates:
                 candidate = response.candidates[0]
-                if getattr(candidate, 'finish_reason', None) == candidate.FinishReason.SAFETY:
+                if (
+                    getattr(candidate, "finish_reason", None)
+                    == candidate.FinishReason.SAFETY
+                ):
                     return "Support Chat"
 
                 title = "".join(
-                    part.text for part in candidate.content.parts
+                    part.text
+                    for part in candidate.content.parts
                     if hasattr(part, "text")
                 ).strip()
 
                 if title:
-                    title = title.strip(' "\'')
+                    title = title.strip(" \"'")
                     words = title.split()
 
                     if 3 <= len(words) <= 10:
                         return title
 
                     if len(words) > 10:
-                        return " ".join(words[:7]) + "..."  
+                        return " ".join(words[:7]) + "..."
 
             keywords = [
-                "withdraw", "withdrawal", "deposit", "transfer", "money", "balance",
-                "login", "password", "error", "503", "app", "crash", "not working",
-                "sbi", "bank", "account", "transaction", "payment", "card", "upi"
+                "withdraw",
+                "withdrawal",
+                "deposit",
+                "transfer",
+                "money",
+                "balance",
+                "login",
+                "password",
+                "error",
+                "503",
+                "app",
+                "crash",
+                "not working",
+                "sbi",
+                "bank",
+                "account",
+                "transaction",
+                "payment",
+                "card",
+                "upi",
             ]
             found = [word for word in keywords if word in first_message.lower()]
             if found:
@@ -322,17 +340,25 @@ class ChatSerializer(serializers.ModelSerializer):
                 if 3 <= len(title.split()) <= 10:
                     return title
 
-            words = [w for w in first_message.split()[:15] if len(w) > 2 and w.isalnum()]
+            words = [
+                w for w in first_message.split()[:15] if len(w) > 2 and w.isalnum()
+            ]
             if len(words) >= 3:
-                return " ".join(words[:7]).strip('.,!?') + ("..." if len(words) > 7 else "")
+                return " ".join(words[:7]).strip(".,!?") + (
+                    "..." if len(words) > 7 else ""
+                )
 
             return "Support Chat"
 
         except Exception as e:
             try:
-                words = [w for w in first_message.split()[:15] if len(w) > 2 and w.isalnum()]
+                words = [
+                    w for w in first_message.split()[:15] if len(w) > 2 and w.isalnum()
+                ]
                 if len(words) >= 3:
-                    return " ".join(words[:7]).strip('.,!?') + ("..." if len(words) > 7 else "")
+                    return " ".join(words[:7]).strip(".,!?") + (
+                        "..." if len(words) > 7 else ""
+                    )
             except:
                 pass
             return "Support Chat"
