@@ -129,13 +129,13 @@
         <input id="id_password" type="password" name="password" />
         {% if errors.password %}
         <div class="error">
-          {% for error in errors.password %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+          {% for error in errors.password %}{{ error }}{% if not forloop.last %}<br>{%  endif %}{% endfor %}
         </div>
         {% endif %}
       </div>
 
       <button type="submit">Sign In</button>
-      <a href="/signupPage/" id="signup">Sign Up</a>
+      <a href="/" id="signup">Sign Up</a>
     </form>
   </body>
 </html>

@@ -8,7 +8,7 @@ from . views import UserSignUp,UserSignIn,SessionCreateView,UserSessionsView,Cha
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('signupPage/',views.UserSignUpPage, name="signup_Page"),
+    path('',views.UserSignUpPage, name="signup_Page"),
     path('signinPage/',views.UserSignInPage,name = "signin_Page"),
     path('chat/', views.UserChatPage, name='chat_page'),
     path('chat/<uuid:session_id>/', views.UserChatPage, name='chat_page_with_id'),
