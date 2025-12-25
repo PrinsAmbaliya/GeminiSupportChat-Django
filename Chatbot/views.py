@@ -121,8 +121,8 @@ class ChatCreateView(APIView):
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def post(self, request, session_id, *args, **kwargs):
-        print("CURRENT USER:", request.user.username)  # Add .username for clarity
-        print("IS AUTHENTICATED:", request.user.is_authenticated)
+        # print("CURRENT USER:", request.user.username) 
+        # print("IS AUTHENTICATED:", request.user.is_authenticated)
         try:
             session = Session.objects.get(
                 session_id=session_id,
