@@ -16,6 +16,8 @@ class CustomerUserAdmin(UserAdmin):
         "last_name",
         "is_staff",
         "is_active",
+        "date_joined",
+        "last_login",
     )
     search_fields = (
         "id",
@@ -26,6 +28,8 @@ class CustomerUserAdmin(UserAdmin):
     list_filter = (
         "is_staff",
         "is_active",
+        "date_joined",
+        "last_login",
     )
 
 

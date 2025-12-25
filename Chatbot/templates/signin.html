@@ -115,8 +115,11 @@
         />
         {% if errors.username_or_email %}
         <div class="error">
-          {% for error in errors.username_or_email %}{{ error }}{% if not
-          forloop.last %}<br />{% endif %}{% endfor %}
+          {% for error in errors.username_or_email %}{{ error }}
+          {% if not forloop.last %}
+          <br />
+          {% endif %}
+          {% endfor %}
         </div>
         {% endif %}
       </div>
@@ -126,8 +129,11 @@
         <input id="id_password" type="password" name="password" />
         {% if errors.password %}
         <div class="error">
-          {% for error in errors.password %}{{ error }}{% if not forloop.last
-          %}<br />{% endif %}{% endfor %}
+          {% for error in errors.password %}{{ error }}
+          {% if not forloop.last%}
+          <br />
+          {% endif %}
+          {% endfor %}
         </div>
         {% endif %}
       </div>
