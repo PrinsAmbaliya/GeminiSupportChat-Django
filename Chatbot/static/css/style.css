@@ -176,7 +176,7 @@ body.light .msg-wrapper.user .message {
   color: #ffffff !important;
 }
 
-.outer-container-chatform{
+.outer-container-chatform {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -195,7 +195,7 @@ body.light .msg-wrapper.user .message {
   /* background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, #313338); */
   background-attachment: fixed;
 }
-    /* position: fixed;
+/* position: fixed;
     bottom: 0;
     width: 60%;
     display: flex;
@@ -227,7 +227,7 @@ body.light .msg-wrapper.user .message {
 
 body.light .signout-btn,
 body.light .signout-btn span {
-  background-color:#5865f2;
+  background-color: #5865f2;
   color: #ffffff !important;
 }
 
@@ -407,13 +407,11 @@ body.light .speaker-icon {
   filter: none !important;
 }
 
-#new_chat{
+#new_chat {
   text-decoration: none;
   color: white;
-
 }
 
-body.light #new_chat{
+body.light #new_chat {
   color: black;
-
 }

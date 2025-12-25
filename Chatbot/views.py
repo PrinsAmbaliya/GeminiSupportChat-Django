@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -8,34 +8,39 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from . serializers import SignInSerializer,SignUpSerializer,ChatSerializer,SessionSerializer
-from . models import Chat,Session
-import uuid 
+from .serializers import (
+    SignInSerializer,
+    SignUpSerializer,
+    ChatSerializer,
+    SessionSerializer,
+)
+from .models import Chat, Session
+import uuid
 import json
 import re
 
+
 class UserSignUp(APIView):
     parser_classes = [MultiPartParser, FormParser]
-    authentication_classes =[]
-    
-    def get(self,request,*args, **kwargs):
-        users = User.objects.all().order_by('id')
-        serializer = SignUpSerializer(users,many=True)
-        
-        return Response({
-            "message":"All User Deteils",
-            "data": serializer.data
-        })
-        
-        
-    def post(self,request,*args, **kwargs):
+    authentication_classes = []
+
+    def get(self, request, *args, **kwargs):
+        users = User.objects.all().order_by("id")
+        serializer = SignUpSerializer(users, many=True)
+
+        return Response({"message": "All User Deteils", "data": serializer.data})
+
+    def post(self, request, *args, **kwargs):
         serializer = SignUpSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message":"User Sucessfully Add","data":serializer.data}, status=200)
+            return Response(
+                {"message": "User Sucessfully Add", "data": serializer.data}, status=200
+            )
         else:
             return Response(serializer.errors, status=400)
-    
+
+
 def UserSignUpPage(request):
     context = {"old_data": {}, "errors": {}, "non_field_errors": []}
 
@@ -44,7 +49,7 @@ def UserSignUpPage(request):
 
         if serializer.is_valid():
             serializer.save()
-            return redirect('signin_Page')
+            return redirect("signin_Page")
 
         errors = {}
         non_field_errors = []
@@ -60,20 +65,24 @@ def UserSignUpPage(request):
         context["old_data"] = request.POST
 
     return render(request, "signup.html", context)
-    
+
 
 class UserSignIn(APIView):
-    parser_classes = [MultiPartParser,FormParser]
+    parser_classes = [MultiPartParser, FormParser]
     authentication_classes = []
-    def post(self,request,*args, **kwargs):
-        serializer = SignInSerializer(data=request.data,context={"request": request})
+
+    def post(self, request, *args, **kwargs):
+        serializer = SignInSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             user = serializer.validated_data["user"]
-            login(request,user)
-            return Response({"message":f"{user.username} Sign In Sucessfully"},status=200)
+            login(request, user)
+            return Response(
+                {"message": f"{user.username} Sign In Sucessfully"}, status=200
+            )
         else:
-            return Response(serializer.errors,status=400)
-        
+            return Response(serializer.errors, status=400)
+
+
 def UserSignInPage(request):
     context = {"old_data": {}, "non_field_errors": [], "errors": {}}
 
@@ -83,7 +92,7 @@ def UserSignInPage(request):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            return redirect('chat_page')
+            return redirect("chat_page")
         else:
             errors = {}
             non_field_errors = []
@@ -97,23 +106,30 @@ def UserSignInPage(request):
             context["errors"] = errors
             context["non_field_errors"] = non_field_errors
             context["old_data"] = request.POST
-            
-    context["signup_success"] = request.GET.get('signup_success') == '1'
+
+    context["signup_success"] = request.GET.get("signup_success") == "1"
     return render(request, "signin.html", context)
 
+
 class SessionCreateView(APIView):
-    parser_classes = [MultiPartParser,FormParser]
+    parser_classes = [MultiPartParser, FormParser]
     authentication_classes = []
-    def post(self,request,*args, **kwargs):
+
+    def post(self, request, *args, **kwargs):
         serializer = SessionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Session created successfully", "data": serializer.data}, status=201)
+            return Response(
+                {"message": "Session created successfully", "data": serializer.data},
+                status=201,
+            )
         return Response(serializer.errors, status=400)
+
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
     def enforce_csrf(self, request):
         return
+
 
 class ChatCreateView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
@@ -121,13 +137,10 @@ class ChatCreateView(APIView):
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def post(self, request, session_id, *args, **kwargs):
-        # print("CURRENT USER:", request.user.username) 
+        # print("CURRENT USER:", request.user.username)
         # print("IS AUTHENTICATED:", request.user.is_authenticated)
         try:
-            session = Session.objects.get(
-                session_id=session_id,
-                username=request.user
-            )
+            session = Session.objects.get(session_id=session_id, username=request.user)
         except Session.DoesNotExist:
             return Response({"error": "Session not found"}, status=400)
 
@@ -135,10 +148,7 @@ class ChatCreateView(APIView):
         if not message:
             return Response({"response": "Please type a message"}, status=400)
 
-        serializer = ChatSerializer(data={
-            "session": session.pk,
-            "message": message
-        })
+        serializer = ChatSerializer(data={"session": session.pk, "message": message})
 
         if serializer.is_valid():
             chat = serializer.save()
@@ -146,9 +156,10 @@ class ChatCreateView(APIView):
 
         return Response(serializer.errors, status=400)
 
+
 class ChatCreateNewView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def post(self, request, *args, **kwargs):
@@ -157,37 +168,35 @@ class ChatCreateNewView(APIView):
             return Response({"error": "Message cannot be empty"}, status=400)
 
         session = Session.objects.create(
-            title="New Chat",
-            description="",
-            username=request.user   
+            title="New Chat", description="", username=request.user
         )
 
-        serializer = ChatSerializer(data={
-            "session": session.pk,
-            "message": message
-        }, context={'request': request})
+        serializer = ChatSerializer(
+            data={"session": session.pk, "message": message},
+            context={"request": request},
+        )
 
         if serializer.is_valid():
             chat = serializer.save()
-            return Response({
-                "session_id": str(session.session_id),
-                "response": chat.response
-            }, status=201)
+            return Response(
+                {"session_id": str(session.session_id), "response": chat.response},
+                status=201,
+            )
 
         return Response(serializer.errors, status=400)
 
 
 def UserChatPage(request, session_id=None):
     if not request.user.is_authenticated:
-        return redirect('signin_Page')
+        return redirect("signin_Page")
 
-    if request.GET.get('new_chat'):
-        return redirect('chat_page')  
+    if request.GET.get("new_chat"):
+        return redirect("chat_page")
 
     if session_id:
         try:
             session = Session.objects.get(session_id=session_id, username=request.user)
-            chats = Chat.objects.filter(session=session).order_by('timestamp')
+            chats = Chat.objects.filter(session=session).order_by("timestamp")
             context = {
                 "session_id": str(session.session_id),
                 "session_title": session.title,
@@ -196,18 +205,24 @@ def UserChatPage(request, session_id=None):
             }
             return render(request, "chatbot.html", context)
         except Session.DoesNotExist:
-            return redirect('chat_page')
+            return redirect("chat_page")
 
-    return render(request, "chatbot.html", {
-        "session_id": None,
-        "session_title": "New Chat",
-        "chats": [],
-        "is_new_chat": True,
-    })
+    return render(
+        request,
+        "chatbot.html",
+        {
+            "session_id": None,
+            "session_title": "New Chat",
+            "chats": [],
+            "is_new_chat": True,
+        },
+    )
+
 
 class UserSessionsView(APIView):
-    parser_classes = [MultiPartParser,FormParser]
+    parser_classes = [MultiPartParser, FormParser]
     authentication_classes = []
+
     def get(self, request, user_id):
         try:
             user = User.objects.get(id=user_id)

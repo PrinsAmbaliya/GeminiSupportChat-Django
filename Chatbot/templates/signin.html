@@ -93,23 +93,19 @@
       <div class="success-message">
         Signup successfully completed! Please sign in.
       </div>
-      {% endif %}
-
-      {% if non_field_errors %}
-      <div style="color: red; margin-bottom: 15px;">
+      {% endif %} {% if non_field_errors %}
+      <div style="color: red; margin-bottom: 15px">
         {% for error in non_field_errors %}
         <p>{{ error }}</p>
         {% endfor %}
       </div>
-      {% endif %}
+      {% endif %} {% if messages %} {% for message in messages %}
+      <p style="color: red; margin-bottom: 15px">{{ message }}</p>
+      {% endfor %} {% endif %}
 
-      {% if messages %}
-      {% for message in messages %}
-      <p style="color: red; margin-bottom: 15px;">{{ message }}</p>
-      {% endfor %}
-      {% endif %}
-
-      <div class="input-group {% if errors.username_or_email %}error{% endif %}">
+      <div
+        class="input-group {% if errors.username_or_email %}error{% endif %}"
+      >
         <label for="id_username_or_email">Username or Email</label>
         <input
           id="id_username_or_email"
@@ -119,7 +115,8 @@
         />
         {% if errors.username_or_email %}
         <div class="error">
-          {% for error in errors.username_or_email %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+          {% for error in errors.username_or_email %}{{ error }}{% if not
+          forloop.last %}<br />{% endif %}{% endfor %}
         </div>
         {% endif %}
       </div>
@@ -129,7 +126,8 @@
         <input id="id_password" type="password" name="password" />
         {% if errors.password %}
         <div class="error">
-          {% for error in errors.password %}{{ error }}{% if not forloop.last %}<br>{%  endif %}{% endfor %}
+          {% for error in errors.password %}{{ error }}{% if not forloop.last
+          %}<br />{% endif %}{% endfor %}
         </div>
         {% endif %}
       </div>
