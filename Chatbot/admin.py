@@ -45,8 +45,7 @@ class SessionAdmin(admin.ModelAdmin):
         'id'
     )
     list_filter = (
-        'title',
-        'created_at'
+        'created_at',
     )
 admin.site.register(Session,SessionAdmin)
 
@@ -57,6 +56,9 @@ class ChatAdmin(admin.ModelAdmin):
         'session_id',
         'message',
         'response',
+        'timestamp',
+    )
+    list_filter = (
         'timestamp',
     )
     search_fields = (
