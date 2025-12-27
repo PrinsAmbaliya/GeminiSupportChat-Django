@@ -94,7 +94,7 @@ function addMessage(text, sender) {
     wrapper.classList.add("msg-wrapper", sender);
 
     const img = document.createElement("img");
-    img.src = sender === "user" ? USER_LOGO : BOT_LOGO;
+    img.className = sender === "user" ? "user-avatar" : "bot-avatar";
     img.alt = sender;
 
     const msgDiv = document.createElement("div");
@@ -122,7 +122,6 @@ function addTypingIndicator() {
     wrapper.id = "typing-indicator";
 
     const img = document.createElement("img");
-    img.src = BOT_LOGO;
     img.alt = "bot";
 
     const typing = document.createElement("div");
@@ -208,6 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("theme", body.classList.contains("light") ? "light" : "dark");
     });
 });
+
+tdnn.addEventListener("click", () => {
+  body.classList.toggle("light");
+  updateAvatars();
+});
+
 
 function getCookie(name) {
     let cookieValue = null;

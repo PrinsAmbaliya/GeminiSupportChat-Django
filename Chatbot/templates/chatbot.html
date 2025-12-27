@@ -39,13 +39,14 @@
       <div class="msg-wrapper user">
         <div class="timestamp">{{ chat.timestamp|date:"H:i" }}</div>
         <div class="message">{{ chat.message }}</div>
-        <img src="{% static 'images/user-logo.png' %}" alt="user" />
+        <div class="user-avatar"></div>
       </div>
       <div class="msg-wrapper bot">
-        <img src="{% static 'images/bot-logo.png' %}" alt="bot" />
+        <div class="bot-avatar"></div>
         <div class="message">{{ chat.response }}</div>
         <div class="timestamp">{{ chat.timestamp|date:"H:i" }}</div>
       </div>
+
       {% endfor %}
     </div>
 
@@ -72,8 +73,8 @@
     />
 
     <script>
-      const USER_LOGO = "{% static 'images/user-logo.png' %}";
-      const BOT_LOGO = "{% static 'images/bot-logo.png' %}";
+      {% comment %} const USER_LOGO = "{% static 'images/user-logo.png' %}";
+      const BOT_LOGO = "{% static 'images/bot-logo.png' %}"; {% endcomment %}
       let currentSessionId = document.getElementById("currentSessionId").value;
     </script>
   </body>

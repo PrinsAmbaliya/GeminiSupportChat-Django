@@ -1,3 +1,13 @@
+:root {
+  --user-logo: url("/static/images/user-logo-dark.png");
+  --bot-logo: url("/static/images/bot-logo-dark.png");
+}
+
+body.light {
+  --user-logo: url("/static/images/user-logo-light.png");
+  --bot-logo: url("/static/images/bot-logo-light.png");
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -414,4 +424,22 @@ body.light .speaker-icon {
 
 body.light #new_chat {
   color: black;
+}
+
+.user-avatar,
+.bot-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  background-image: var(--user-logo);
+}
+
+.bot-avatar {
+  background-image: var(--bot-logo);
 }
