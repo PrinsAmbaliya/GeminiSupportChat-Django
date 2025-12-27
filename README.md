@@ -135,16 +135,16 @@ http://127.0.0.1:8000
 <img width="1919" height="1020" alt="Screenshot 2025-12-22 093740" src="https://github.com/user-attachments/assets/16a6cac1-2f46-4526-aab1-9b63cbde8c23" />
 
 ### 4. ChatBot In Dark Mode
-<img width="1919" height="1020" alt="Screenshot 2025-12-22 093912" src="https://github.com/user-attachments/assets/f1f4b404-8bc1-42ae-a02d-cffce94877f8" />
+<img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/5cc6f6c4-35c7-49e6-9f71-ec1f67eebf86" />
 
 ### 5. ChatBot In Light Mode
-<img width="1919" height="1019" alt="Screenshot 2025-12-22 093950" src="https://github.com/user-attachments/assets/1b6bc1f3-b583-4fbb-86e4-e79640437b77" />
+<img width="1919" height="967" alt="image" src="https://github.com/user-attachments/assets/69486fed-a86c-496e-bc1a-6cf10af3810a" />
 
 ### 6. Save User Session Id Of Every New Chats
-<img width="1919" height="1021" alt="Screenshot 2025-12-22 095347" src="https://github.com/user-attachments/assets/141bd341-5df4-4209-a1dd-1694eea19477" />
+<img width="1919" height="955" alt="image" src="https://github.com/user-attachments/assets/32196e71-92c8-43d0-938f-f6e089048629" />
 
 ### 7. Save User Chats
-<img width="1915" height="1021" alt="Screenshot 2025-12-22 095502" src="https://github.com/user-attachments/assets/2e8fdcc0-432f-4942-a0b9-89ba8eedd1e1" />
+<img width="1919" height="958" alt="image" src="https://github.com/user-attachments/assets/861a863a-2e7b-4ba2-b558-a5224698987f" />
 
 ### 8. API Testing Of SignUp In Postman
 <img width="1919" height="1017" alt="Screenshot 2025-12-22 103204" src="https://github.com/user-attachments/assets/25f59950-1d6a-4e7d-997d-f249eca2b3b9" />
