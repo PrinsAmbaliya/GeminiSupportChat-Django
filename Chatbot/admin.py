@@ -57,7 +57,7 @@ class ChatAdmin(admin.ModelAdmin):
         "id",
         "username",
         "session_id",
-        "message",
+        "message",  
         "response",
         "timestamp",
     )
