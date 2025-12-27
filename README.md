@@ -129,7 +129,7 @@ http://127.0.0.1:8000
 <img width="1919" height="1019" alt="Screenshot 2025-12-22 093420" src="https://github.com/user-attachments/assets/ec5402a7-28d4-468c-9cfe-0452d3ce5bde" />
 
 ### 2. Save User Details
-<img width="1918" height="1017" alt="Screenshot 2025-12-22 093514" src="https://github.com/user-attachments/assets/7f4790fa-16fa-4981-bb24-8c8b55473699" />
+<img width="1919" height="962" alt="image" src="https://github.com/user-attachments/assets/1f2b4c33-fce4-47c3-8005-1a96e3edd908" />
 
 ### 3. SignIn Page
 <img width="1919" height="1020" alt="Screenshot 2025-12-22 093740" src="https://github.com/user-attachments/assets/16a6cac1-2f46-4526-aab1-9b63cbde8c23" />
