@@ -93,9 +93,8 @@ function addMessage(text, sender) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("msg-wrapper", sender);
 
-    const img = document.createElement("img");
-    img.className = sender === "user" ? "user-avatar" : "bot-avatar";
-    img.alt = sender;
+    const avatar = document.createElement("div");
+    avatar.className = sender === "user" ? "user-avatar" : "bot-avatar";
 
     const msgDiv = document.createElement("div");
     msgDiv.classList.add("message");
@@ -105,15 +104,14 @@ function addMessage(text, sender) {
     time.classList.add("timestamp");
     time.textContent = formatTime();
 
-    if (sender === "user") {
-        wrapper.append(time, msgDiv, img);
-    } else {
-        wrapper.append(img, msgDiv, time);
-    }
+    sender === "user"
+        ? wrapper.append(time, msgDiv, avatar)
+        : wrapper.append(avatar, msgDiv, time);
 
     chatBox.appendChild(wrapper);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
 
 // Typing Indicator
 function addTypingIndicator() {
@@ -121,21 +119,22 @@ function addTypingIndicator() {
     wrapper.classList.add("msg-wrapper", "bot");
     wrapper.id = "typing-indicator";
 
-    const img = document.createElement("img");
-    img.alt = "bot";
+    const avatar = document.createElement("div");
+    avatar.className = "bot-avatar";
 
     const typing = document.createElement("div");
     typing.classList.add("message", "typing");
+
     for (let i = 0; i < 3; i++) {
-        const dot = document.createElement("span");
-        typing.appendChild(dot);
+        typing.appendChild(document.createElement("span"));
     }
 
-    wrapper.append(img, typing);
+    wrapper.append(avatar, typing);
     chatBox.appendChild(wrapper);
     chatBox.scrollTop = chatBox.scrollHeight;
     return wrapper;
 }
+
 
 // Main: Send Message
 chatForm.addEventListener("submit", async (e) => {
@@ -207,12 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("theme", body.classList.contains("light") ? "light" : "dark");
     });
 });
-
-tdnn.addEventListener("click", () => {
-  body.classList.toggle("light");
-  updateAvatars();
-});
-
 
 function getCookie(name) {
     let cookieValue = null;

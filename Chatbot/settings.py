@@ -80,9 +80,9 @@ WSGI_APPLICATION = "Chatbot.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "Enter Your Database Name",
-        "USER": "Enter Your Database User",
-        "PASSWORD": "Enter Your Database password",
+        "NAME": "Customer_ChatBot",
+        "USER": "Customer_ChatBot",
+        "PASSWORD": "Prin$3333",
         "HOST": "localhost",
         "PORT": "5432",
     }
