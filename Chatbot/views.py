@@ -111,24 +111,31 @@ def UserSignInPage(request):
     return render(request, "signin.html", context)
 
 
-class SessionCreateView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
-    authentication_classes = []
-
-    def post(self, request, *args, **kwargs):
-        serializer = SessionSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {"message": "Session created successfully", "data": serializer.data},
-                status=201,
-            )
-        return Response(serializer.errors, status=400)
-
-
 class CsrfExemptSessionAuthentication(SessionAuthentication):
     def enforce_csrf(self, request):
         return
+    
+class SessionCreateView(APIView):
+    authentication_classes = [CsrfExemptSessionAuthentication]
+    permission_classes = [IsAuthenticated] 
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def post(self, request, *args, **kwargs):
+        data = {
+            "title": request.data.get("title", "Untitled Session"),
+            "description": request.data.get("description", "")
+        }
+
+        serializer = SessionSerializer(data=data)
+        if serializer.is_valid():
+            session = serializer.save(username=request.user)
+            return Response({
+                "message": "Session created successfully",
+                "data": serializer.data
+            }, status=201)
+
+        return Response(serializer.errors, status=400)
+
 
 
 class ChatCreateView(APIView):
@@ -137,22 +144,21 @@ class ChatCreateView(APIView):
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def post(self, request, session_id, *args, **kwargs):
-        # print("CURRENT USER:", request.user.username)
-        # print("IS AUTHENTICATED:", request.user.is_authenticated)
         try:
             session = Session.objects.get(session_id=session_id, username=request.user)
         except Session.DoesNotExist:
-            return Response({"error": "Session not found"}, status=400)
+            return Response({"error": "Session not found"}, status=404)
 
         message = request.data.get("message", "").strip()
         if not message:
-            return Response({"response": "Please type a message"}, status=400)
+            return Response({"error": "Message cannot be empty"}, status=400)
 
-        serializer = ChatSerializer(data={"session": session.pk, "message": message})
-
+        serializer = ChatSerializer(data={"message": message}, context={"request": request})
         if serializer.is_valid():
-            chat = serializer.save()
-            return Response({"response": chat.response}, status=201)
+            chat = serializer.save(session=session)
+            return Response(
+                {"session_id": str(session.session_id), "response": chat.response}, status=201
+            )
 
         return Response(serializer.errors, status=400)
 
@@ -172,15 +178,13 @@ class ChatCreateNewView(APIView):
         )
 
         serializer = ChatSerializer(
-            data={"session": session.pk, "message": message},
+            data={"message": message},
             context={"request": request},
         )
-
         if serializer.is_valid():
-            chat = serializer.save()
+            chat = serializer.save(session=session)
             return Response(
-                {"session_id": str(session.session_id), "response": chat.response},
-                status=201,
+                {"session_id": str(session.session_id), "response": chat.response}, status=201
             )
 
         return Response(serializer.errors, status=400)
@@ -220,16 +224,10 @@ def UserChatPage(request, session_id=None):
 
 
 class UserSessionsView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
-    authentication_classes = []
+    authentication_classes = [CsrfExemptSessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, user_id):
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found!"}, status=400)
-        sessions = Session.objects.filter(username=user_id)
-        if not sessions.exists():
-            return Response({"message": "No sessions found for this user."}, status=200)
+    def get(self, request):
+        sessions = Session.objects.filter(username=request.user).order_by('-created_at')
         serializer = SessionSerializer(sessions, many=True)
         return Response(serializer.data, status=200)

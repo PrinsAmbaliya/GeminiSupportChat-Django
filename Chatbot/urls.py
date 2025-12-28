@@ -16,7 +16,7 @@ urlpatterns = [
     path('api/register',UserSignUp.as_view(), name="Register"),
     path('api/login',UserSignIn.as_view(), name="Login"),
     path('api/session/create',SessionCreateView.as_view(), name="ChatBot"),
-    path('api/session/user/<int:user_id>',UserSessionsView.as_view(), name = "user_sessions"),
+    path('api/session/user',UserSessionsView.as_view(), name = "user_sessions"),
     path('api/chat/<uuid:session_id>/chat',ChatCreateView.as_view(),name="Create_chat"),
     path('api/chat/new/chat',ChatCreateNewView.as_view(),name="create_new_chat")
 ] 

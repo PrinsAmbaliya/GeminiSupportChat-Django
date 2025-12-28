@@ -81,38 +81,39 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 class SignInSerializer(serializers.Serializer):
     username_or_email = serializers.CharField(required=True, allow_blank=False)
-    password = serializers.CharField(
-        required=True,
-        style={"input_type": "password"},
-    )
+    password = serializers.CharField(required=True, style={"input_type": "password"})
     user = None
 
     def validate(self, data):
         request = self.context.get("request")
-        username = data.get("username_or_email")
+        username_or_email = data.get("username_or_email")
         password = data.get("password")
 
-        if not username:
+        if not username_or_email:
             raise serializers.ValidationError(
-                {"Username or Email": "Username or Email is required."}
+                {"username_or_email": "Username or Email is required."}
             )
         if not password:
-            raise serializers.ValidationError({"Password": "Password is required."})
+            raise serializers.ValidationError({"password": "Password is required."})
+
         user = None
-        if "@" in username:
-            try:
-                username = User.objects.get(email=username)
-                user = authenticate(request, username=username, password=password)
-            except User.DoesNotExist:
-                raise serializers.ValidationError({"Email": "Invalid Email!"})
-        if username:
-            try:
-                username = User.objects.get(username=username)
-                user = authenticate(request, username=username, password=password)
-            except User.DoesNotExist:
-                raise serializers.ValidationError({"Username": "Invalid Username!"})
+
+        if "@" in username_or_email:
+            users = User.objects.filter(email=username_or_email)
+            if not users.exists():
+                raise serializers.ValidationError({"email": "Invalid Email!"})
+            user_obj = users.first() 
+            user = authenticate(request, username=user_obj.username, password=password)
+        else: 
+            users = User.objects.filter(username=username_or_email)
+            if not users.exists():
+                raise serializers.ValidationError({"username": "Invalid Username!"})
+            user_obj = users.first()
+            user = authenticate(request, username=user_obj.username, password=password)
+
         if user is None:
-            raise serializers.ValidationError({"Password": "Invalid Password!"})
+            raise serializers.ValidationError({"password": "Invalid Password!"})
+
         data["user"] = user
         return data
 
@@ -121,12 +122,13 @@ class SessionSerializer(serializers.ModelSerializer):
     username = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()
     )
+    read_only_fields = ['session_id', 'created_at', 'username']
 
     class Meta:
         model = Session
         fields = ["id", "session_id", "title", "description", "created_at", "username"]
-
-
+        read_only_fields = ['session_id', 'created_at', 'username']
+        
 class UserSessionsSerializer(serializers.ModelSerializer):
     username = serializers.SlugRelatedField(slug_field="username", read_only=True)
 
@@ -176,20 +178,19 @@ Resolve the user’s issue efficiently while keeping the reply direct, helpful, 
 
 
 class ChatSerializer(serializers.ModelSerializer):
-    response = serializers.CharField(required=False)
-    session = serializers.PrimaryKeyRelatedField(
-        queryset=Session.objects.all(), required=True
-    )
-
     class Meta:
         model = Chat
         fields = ["id", "session", "message", "response", "timestamp"]
+        read_only_fields = ['session', 'response', 'timestamp']  
+        extra_kwargs = {
+            'message': {'required': True, 'allow_blank': False}
+        }
 
-    def validate(self, data):
-        message = data.get("message", "").strip()
+    def validate_message(self, value):
+        message = value.strip()
         if not message:
-            raise serializers.ValidationError({"message": "Message cannot be empty!"})
-        return data
+            raise serializers.ValidationError("Message cannot be empty!")
+        return message
 
     def create(self, validated_data):
         session = validated_data["session"]
