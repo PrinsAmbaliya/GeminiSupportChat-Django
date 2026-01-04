@@ -23,6 +23,7 @@ class CustomerUserAdmin(UserAdmin):
         "id",
         "username",
         "email",
+        "first_name",
     )
 
     list_filter = (

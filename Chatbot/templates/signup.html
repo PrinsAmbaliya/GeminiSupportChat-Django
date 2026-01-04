@@ -81,6 +81,71 @@
         text-decoration: none;
         cursor: pointer;
       }
+
+      #password-suggestions {
+        background: #f1f1f1;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 8px;
+      }
+
+      #suggestion-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      #suggestion-list li {
+        background: #fff;
+        padding: 8px;
+        margin-bottom: 5px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: monospace;
+      }
+
+      #suggestion-list li:hover {
+        background: #e2e3e5;
+      }
+
+      .password-popup {
+        position: absolute;
+        width: 280px;
+        background: #1f1f1f;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        display: none;
+        z-index: 9999;
+        padding: 8px 0;
+      }
+
+      .popup-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        cursor: pointer;
+      }
+
+      .popup-item:hover {
+        background: #2a2a2a;
+      }
+
+      .popup-item .icon {
+        font-size: 20px;
+      }
+
+      .popup-item .title {
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .popup-item .password {
+        color: #bdbdbd;
+        font-family: monospace;
+        font-size: 20px;
+      }
     </style>
     <title>Sign Up</title>
   </head>
@@ -161,6 +226,16 @@
         {% endif %}
       </div>
 
+      <div id="password-popup" class="password-popup">
+        <div class="popup-item" onclick="selectPassword(this)">
+          <span class="icon">🔑</span>
+          <div>
+            <div class="title">suggested Password</div>
+            <div class="password"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="input-group {% if errors.confirm_password %}error{% endif %}">
         <label for="id_confirm_password">Confirm Password</label>
         <input
@@ -177,4 +252,69 @@
       <a href="/signinPage/" id="signin">Sign In</a>
     </form>
   </body>
+  <script>
+    const passwordInput = document.getElementById("id_password");
+    const popup = document.getElementById("password-popup");
+    const passwordFields = document.querySelectorAll(".password");
+
+    let selectedPassword = ""; // store chosen password
+
+    function generateStrongPassword() {
+      const lower = "abcdefghijklmnopqrstuvwxyz";
+      const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const number = "0123456789";
+      const special = "!@#$%^&*";
+      const all = lower + upper + number + special;
+
+      let pass =
+        lower[Math.floor(Math.random() * lower.length)] +
+        upper[Math.floor(Math.random() * upper.length)] +
+        number[Math.floor(Math.random() * number.length)] +
+        special[Math.floor(Math.random() * special.length)];
+
+      for (let i = 4; i < 8; i++) {
+        pass += all[Math.floor(Math.random() * all.length)];
+      }
+
+      return pass
+        .split("")
+        .sort(() => 0.5 - Math.random())
+        .join("");
+    }
+
+    function showPopup() {
+      const rect = passwordInput.getBoundingClientRect();
+      popup.style.top = rect.bottom + window.scrollY + 5 + "px";
+      popup.style.left = rect.left + "px";
+
+      if (selectedPassword) {
+        passwordFields.forEach((p) => (p.textContent = selectedPassword));
+      }
+      else {
+        passwordFields.forEach(
+          (p) => (p.textContent = generateStrongPassword())
+        );
+      }
+
+      popup.style.display = "block";
+    }
+
+    function selectPassword(el) {
+      selectedPassword = el.querySelector(".password").textContent;
+      passwordInput.value = selectedPassword;
+      popup.style.display = "none";
+    }
+
+    passwordInput.addEventListener("focus", showPopup);
+
+    passwordInput.addEventListener("input", () => {
+      selectedPassword = "";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!popup.contains(e.target) && e.target !== passwordInput) {
+        popup.style.display = "none";
+      }
+    });
+  </script>
 </html>

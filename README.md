@@ -126,37 +126,44 @@ http://127.0.0.1:8000
 ## Screenshots
 
 ### 1. SignUp Page
-<img width="1919" height="1019" alt="Screenshot 2025-12-22 093420" src="https://github.com/user-attachments/assets/ec5402a7-28d4-468c-9cfe-0452d3ce5bde" />
+<img width="1919" height="1020" alt="image" src="https://github.com/user-attachments/assets/935d2b63-6782-477c-bd53-5aaffd19a6a5" />
 
-### 2. Save User Details
-<img width="1919" height="962" alt="image" src="https://github.com/user-attachments/assets/1f2b4c33-fce4-47c3-8005-1a96e3edd908" />
+### 2. Save User Details In Admin
+<img width="1919" height="1020" alt="image" src="https://github.com/user-attachments/assets/db3a6fe5-6b82-4c31-9635-f1da781ef043" />
 
 ### 3. SignIn Page
-<img width="1919" height="1020" alt="Screenshot 2025-12-22 093740" src="https://github.com/user-attachments/assets/16a6cac1-2f46-4526-aab1-9b63cbde8c23" />
+<img width="1919" height="1020" alt="image" src="https://github.com/user-attachments/assets/93fc6ce8-6253-4afb-b0bc-d0613a211a60" />
 
-### 4. ChatBot In Dark Mode
-<img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/5cc6f6c4-35c7-49e6-9f71-ec1f67eebf86" />
+### 4. Save User Login Details In Admin
+<img width="1919" height="1017" alt="image" src="https://github.com/user-attachments/assets/ef117aaa-cc6c-464b-8b2d-388d886a7a6e" />
 
-### 5. ChatBot In Light Mode
-<img width="1919" height="967" alt="image" src="https://github.com/user-attachments/assets/69486fed-a86c-496e-bc1a-6cf10af3810a" />
+### 5. ChatBot In Dark Mode
+<img width="1919" height="1020" alt="image" src="https://github.com/user-attachments/assets/55c774e8-a3e5-4a85-adfb-a582920195d8" />
 
-### 6. Save User Session Id Of Every New Chats
-<img width="1919" height="955" alt="image" src="https://github.com/user-attachments/assets/32196e71-92c8-43d0-938f-f6e089048629" />
+### 6. ChatBot In Light Mode
+<img width="1919" height="1017" alt="image" src="https://github.com/user-attachments/assets/88ef7fc7-c6cd-49e5-a270-8ffe0e46539c" />
 
-### 7. Save User Chats
-<img width="1919" height="958" alt="image" src="https://github.com/user-attachments/assets/861a863a-2e7b-4ba2-b558-a5224698987f" />
+### 7. Save User Session Id Of Every New Chats
+<img width="1919" height="1017" alt="image" src="https://github.com/user-attachments/assets/7c15cd13-8735-4fab-b43b-8f6bb9292a94" />
 
-### 8. API Testing Of SignUp In Postman
-<img width="1919" height="1017" alt="Screenshot 2025-12-22 103204" src="https://github.com/user-attachments/assets/25f59950-1d6a-4e7d-997d-f249eca2b3b9" />
+### 8. Save User Chats
+<img width="1919" height="1021" alt="image" src="https://github.com/user-attachments/assets/6c045407-dd97-4309-8a31-b52d032cf4cd" />
 
-### 9. API Testing Of SignIn In Postman
-<img width="1918" height="1019" alt="image" src="https://github.com/user-attachments/assets/d83cbc85-5b69-46cb-b385-1d35c3bf877c" />
+### 9. API Testing Of SignUp In Postman
+<img width="1919" height="1018" alt="image" src="https://github.com/user-attachments/assets/402e55ac-0a2d-46d6-ae82-656f118ddd24" />
 
-### 10. API Testing Of Create Session Id In Postman
-<img width="1919" height="1016" alt="image" src="https://github.com/user-attachments/assets/dc90ff57-84a8-4861-9bfa-88bbe31e5de6" />
+### 10. API Testing Of SignIn In Postman
+<img width="1919" height="1021" alt="image" src="https://github.com/user-attachments/assets/da4bbe30-d10f-4006-8d0f-39b6049a781d" />
 
-### 11. API Testing Of Save Chats Of Session Id In Postman
-<img width="1919" height="1014" alt="image" src="https://github.com/user-attachments/assets/5430da8b-851f-4555-9f29-5ea4f6639e20" />
+### 11. API Testing Of Create Session Id In Postman
+<img width="1919" height="1016" alt="image" src="https://github.com/user-attachments/assets/f2a2d5a3-02b7-47f3-8a68-c0b5833dfde5" />
+
+### 12. API Testing Of Save Chats Of Session Id In Postman
+<img width="1919" height="1016" alt="image" src="https://github.com/user-attachments/assets/f59d8ad9-95d7-4c88-8ba0-a82b9bd6df26" />
+
+### 13. API Testing Of Save Chats Of Session Id For New Chat In Postman
+<img width="1919" height="1018" alt="image" src="https://github.com/user-attachments/assets/8529fc70-756f-4418-a054-f28855228bb4" />
+
 
 ---
 
