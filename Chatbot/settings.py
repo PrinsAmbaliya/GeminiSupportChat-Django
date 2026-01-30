@@ -25,8 +25,7 @@ SECRET_KEY = "django-insecure-$nq+ch54*fhrzh6ie%n^cw9a_hds&jzik3ime!k2e5&(-+x$4y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -80,10 +79,10 @@ WSGI_APPLICATION = "Chatbot.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "Customer_ChatBot",
-        "USER": "Customer_ChatBot",
-        "PASSWORD": "Prin$3333",
-        "HOST": "localhost",
+        "NAME": "prins_ambaliya",
+        "USER": "prins_ambaliya_user",
+        "PASSWORD": "CgquPNcoOEbzYWxh638iBIDzDJEcnXih",
+        "HOST": "dpg-d5uc9okhg0os73eg85h0-a",
         "PORT": "5432",
     }
 }
